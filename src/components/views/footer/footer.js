@@ -1,8 +1,10 @@
+import Container from 'react-bootstrap/Container';
+
 const Footer = () =>{
     return(
-        <div>
-            <h2>Footer</h2>
-        </div>
+        <Container>
+            <h5 className="text-center text-muted">Create by Szylman96 </h5>
+        </Container>
     );
 }
 
