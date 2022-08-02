@@ -3,27 +3,27 @@ import { useSelector } from "react-redux";
 import { Button, Card, Col, Modal, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { removePost } from "../../../redux/postsRedux";
+import { getPostById, removePost } from "../../../redux/postsRedux";
 
-export const getPostById = ({ posts }, postsId) => posts.find(list => posts.id === postsId);
 
 const SinglePost = () =>{
     const dispatch = useDispatch();
-    const { postsId } = useParams();
+    const { postId } = useParams();
+    const postData = useSelector(state => getPostById(state, postId));
+
     const [showModal, setShowModal] = useState(false);
+
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
 
     const handleRemove = e => {
         e.preventDefault();
-        dispatch(removePost(postsId));
+        dispatch(removePost(postData.id));
         handleClose();
     };
-    const postData = useSelector(state => getPostById(state, postsId));
     
     if(!postData) return <Navigate to="/" />
-    else 
-
+    else
     return(
         <div>
             <Modal show={showModal} onHide={handleClose}>
@@ -51,7 +51,7 @@ const SinglePost = () =>{
                             <Card.Title as="h2">{postData.title}</Card.Title>
                             <Card.Text as="p" className='my-0'><strong>Author: </strong>{postData.author}</Card.Text>
                             <Card.Text as="p" ><strong>Published: </strong>{postData.publishedDate}</Card.Text>
-                            <Card.Text className='mb-4'>{postData.shortDescription}</Card.Text>        
+                            <Card.Text className='mb-4'>{postData.content}</Card.Text>        
                         </Card.Body>
                     </Card>
                 </Col>
