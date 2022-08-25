@@ -6,7 +6,7 @@ import NotFound from './components/pages/notFound/notFound';
 import SinglePost from './components/pages/post/singlePost';
 import Footer from './components/views/footer/footer';
 import Header from './components/views/header/header';
-import PostEdit from './components/pages/post/edit';
+import PostEdit from './components/pages/post/postEdit';
 import PostAdd from './components/pages/post/postAdd';
 
 
