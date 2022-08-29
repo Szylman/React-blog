@@ -14,7 +14,7 @@ const posts = useSelector(getAllPosts)
   return (
     <Row xs={1} md={2} lg={3} className="g-4">
       {posts.map(post => (
-        <Col>
+        <Col key={post.id}>
           <Card>
             <Card.Body>
               <Card.Title as="h3">{post.title}</Card.Title>

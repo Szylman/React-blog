@@ -1,6 +1,8 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
 import { Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 
 const PostForm = ({action, actionText, ...props}) => {
@@ -41,7 +43,7 @@ const PostForm = ({action, actionText, ...props}) => {
             <Form.Group >
               <Form.Label value={content}>Main content</Form.Label>              
               <FloatingLabel controlId="floatingTextarea" className="mb-3">
-                  <Form.Control as="textarea" placeholder="Leave a comment here" style={{ height: '100px' }} value={content} onChange={e => setContent(e.target.value)} />
+                  <ReactQuill as="textarea" placeholder="Leave a comment here"  value={content} onChange={value => setContent(value)} />
               </FloatingLabel>
             </Form.Group>
             <Button as="input" type="submit" value={actionText} />{' '}        
