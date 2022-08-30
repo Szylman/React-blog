@@ -3,47 +3,83 @@ import PropTypes from 'prop-types';
 import { Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useForm } from "react-hook-form";
 
 
 const PostForm = ({action, actionText, ...props}) => {
     const [title, setTitle] = useState(props.title || '');
     const [author, setAuthor] = useState(props.author || '');
-    const [publishedDate, setPublishedDate] = useState(props.publishedDate || '');
+    const [publishedDate, setPublishedDate] = useState(props.publishedDate || new Date() ||'');
     const [shortDescription, setShortDescription] = useState(props.shortDescription || '');
     const [content, setContent] = useState(props.content || '');
+    const [contentError, setContentError] = useState(false);
+    const [dateError, setDateError] = useState(false);
+    const { register, handleSubmit: validate, formState: { errors } } = useForm();
 
-    const handleSubmit = e => {
-        e.preventDefault();
+
+    const handleSubmit = () => {
+      setContentError(!content)
+      setDateError(!publishedDate)
+      if(content && publishedDate) {
         action({ title, author, publishedDate, shortDescription, content });
-      };
+      }
+    };
 
     return (
         <Row>
         <Col md={{span: 6, offset: 3}}>
           <h1>{actionText}</h1>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3 w-50">
-              <Form.Label >Title</Form.Label>
-              <Form.Control value={title} type="text" placeholder="Enter title" onChange={e => setTitle(e.target.value)} />
+          <Form onSubmit={validate(handleSubmit)}>
+            <Form.Group className="mb-3 w-50" controlId="formBasicEmail">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                {...register("title", { required: true, minLength: 3 })}
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                type="text" placeholder="Enter title"
+              />
+              {errors.title && <small className="d-block form-text text-danger mt-2">Title is too short (min is 3)</small>}
             </Form.Group>
             <Form.Group className="mb-3 w-50">
               <Form.Label >Author</Form.Label>
-              <Form.Control type="text" placeholder="Enter author" value={author} onChange={e => setAuthor(e.target.value)}/>
+              <Form.Control 
+                {...register("author", { required: true, minLength: 3 })} 
+                type="text" placeholder="Enter author" 
+                value={author} 
+                onChange={e => setAuthor(e.target.value)}
+              />
+            {errors.author && <small className="d-block form-text text-danger mt-2">Title is too short (min is 3)</small>}
             </Form.Group>
             <Form.Group className="mb-3 w-50">
               <Form.Label value={publishedDate}>Published</Form.Label>
-              <Form.Control type="text" placeholder="dd-mm-yyyy" value={publishedDate} onChange={e => setPublishedDate(e.target.value)}/>
+              <DatePicker 
+              selected={publishedDate}
+              onChange={(publishedDate)=> setPublishedDate(publishedDate)}
+              />
+              {dateError && <small className="d-block form-text text-danger mt-2">Date can't be empty</small>}
             </Form.Group>
             <Form.Group >
               <Form.Label value={shortDescription}>Short description</Form.Label>              
               <FloatingLabel controlId="floatingTextarea" className="mb-3">
-                  <Form.Control as="textarea" placeholder="Leave a comment here" style={{ height: '100px' }} value={shortDescription} onChange={e => setShortDescription(e.target.value)} />
+                  <Form.Control
+                  {...register("shortDescription", { required: true, minLength: 20 })}
+                  as="textarea" placeholder="Leave a comment here" 
+                  style={{ height: '100px' }} 
+                  value={shortDescription} 
+                  onChange={e => setShortDescription(e.target.value)} />
               </FloatingLabel>
+              {errors.shortDescription && <small className="d-block form-text text-danger mt-2">Title is too short (min is 20)</small>}
             </Form.Group> 
             <Form.Group >
               <Form.Label value={content}>Main content</Form.Label>              
               <FloatingLabel controlId="floatingTextarea" className="mb-3">
-                  <ReactQuill as="textarea" placeholder="Leave a comment here"  value={content} onChange={value => setContent(value)} />
+                  <ReactQuill as="textarea" placeholder="Leave a comment here"  
+                  value={content} 
+                  onChange={value => setContent(value)} 
+                  />
+                  {contentError && <small className="d-block form-text text-danger mt-2">Content can't be empty</small>}
               </FloatingLabel>
             </Form.Group>
             <Button as="input" type="submit" value={actionText} />{' '}        
