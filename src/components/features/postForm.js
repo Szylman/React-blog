@@ -6,6 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { getAllCategories } from "../../redux/categoriesRedux";
 
 
 const PostForm = ({action, actionText, ...props}) => {
@@ -16,12 +18,17 @@ const PostForm = ({action, actionText, ...props}) => {
     const [content, setContent] = useState(props.content || '');
     const [contentError, setContentError] = useState(false);
     const [dateError, setDateError] = useState(false);
+    const [categoryError, setCategoryError] = useState(false);
+    const [category, setCategory] = useState(props.category || '');
+    const categories = useSelector(getAllCategories);
+
     const { register, handleSubmit: validate, formState: { errors } } = useForm();
 
 
     const handleSubmit = () => {
       setContentError(!content)
       setDateError(!publishedDate)
+      setCategoryError(!category);
       if(content && publishedDate) {
         action({ title, author, publishedDate, shortDescription, content });
       }
@@ -59,6 +66,18 @@ const PostForm = ({action, actionText, ...props}) => {
               onChange={(publishedDate)=> setPublishedDate(publishedDate)}
               />
               {dateError && <small className="d-block form-text text-danger mt-2">Date can't be empty</small>}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>   
+              <Form.Control {...register("category", { required: true})}
+                as="select"
+                placeholder="Please select category"
+                value={category ? category : "1"}
+                onChange={e => setCategory(e.target.value)}>
+                  <option disabled value="1">Select category...</option>
+                  {categories.map((category, index) => <option key={index} value={category}>{category}</option> )}   
+              </Form.Control>            
+              {categoryError && <small className="d-block form-text text-danger mt-2">Please choose category</small>}      
             </Form.Group>
             <Form.Group >
               <Form.Label value={shortDescription}>Short description</Form.Label>              

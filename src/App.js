@@ -8,6 +8,9 @@ import Footer from './components/views/footer/footer';
 import Header from './components/views/header/header';
 import PostEdit from './components/pages/post/postEdit';
 import PostAdd from './components/pages/post/postAdd';
+import Categories from './components/pages/categories/categories';
+import PostsByCategory from './components/pages/categories/postByCategory';
+
 
 
 function App() {
@@ -16,6 +19,8 @@ function App() {
     <Header />
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path='/categories' element={<Categories />} />
+      <Route path='/category/:postCategory' element={<PostsByCategory />} />
       <Route path="/post/:postId" element={<SinglePost />} />
       <Route path="/post/add" element={<PostAdd />} />
       <Route path="/post/edit/:postId" element={<PostEdit />} />

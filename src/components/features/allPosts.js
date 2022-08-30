@@ -21,6 +21,7 @@ const posts = useSelector(getAllPosts)
               <Card.Title as="h3">{post.title}</Card.Title>
               <Card.Text as="p" className='my-0'><strong>Author: </strong>{post.author}</Card.Text>
               <Card.Text as="p" ><strong>Published: </strong>{dateToStr (post.publishedDate)}</Card.Text>
+              <Card.Text><b>Category:</b> {post.category}</Card.Text>
               <Card.Text className='mb-4'>{post.shortDescription}</Card.Text>
               <Button variant="primary" key={post.id} as={NavLink} to={"/post/"+ post.id}>Read more</Button>
             </Card.Body>
